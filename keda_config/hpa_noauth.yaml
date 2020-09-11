@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: http-scaledobject
+  namespace: default
+  labels:
+    deploymentName: dummy
+spec:
+  maxReplicaCount: 4
+  pollingInterval: 3  # Optional. Default: 30 seconds
+  cooldownPeriod:  5 # Optional. Default: 300 seconds
+  scaleTargetRef:
+    deploymentName: dummy
+    name: dummy
+  triggers:
+    - type: metrics-api
+      metadata:
+        targetValue: "1"
+        url: "http://localhost:5000/app/noAuth/metric/mid"
+        valueLocation: "metric"

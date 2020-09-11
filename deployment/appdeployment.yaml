@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: app
+spec:
+  ports:
+    - port: 5000
+      protocol: TCP
+      targetPort: 5000
+  selector:
+    app: app
+    tier: frontend
+  type: LoadBalancer
+  externalName: app.default.svc.cluster.local
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: app
+spec:
+  selector:
+    matchLabels:
+      app: app
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app
+        tier: frontend
+    spec:
+      containers:
+        - name: master
+          image: local/app
+          imagePullPolicy: IfNotPresent
+          args:
+            - app
+          ports:
+            - containerPort: 5000
+              name: app
+          resources:
+            limits:
+              cpu: "0.1"

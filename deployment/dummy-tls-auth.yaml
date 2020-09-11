@@ -1,0 +1,27 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: dummy-tls-auth
+  labels:
+    app: dummy-tls-auth
+spec:
+  selector:
+    matchLabels:
+      app: dummy-tls-auth
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dummy-tls-auth
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: dummy-tls-auth
+          image: local/dummy
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - pkill -f "sleep"
