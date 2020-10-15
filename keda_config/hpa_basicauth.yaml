@@ -4,7 +4,6 @@ metadata:
   name: keda-metric-api-basic-auth
   namespace: default
 data:
-  authMode: "YmFzaWNBdXRoCg==" #base64 encoding of authMode
   username: "YWRtaW4=" #base64 encoding of username  i.e. admin
   password: "YWRtaW4=" #base64 encoding of password  i.e. admin
 ---
@@ -15,9 +14,6 @@ metadata:
   namespace: default
 spec:
   secretTargetRef:
-    - parameter: authMode
-      name: keda-metric-api-basic-auth
-      key: authMode
     - parameter: username
       name: keda-metric-api-basic-auth
       key: username
@@ -45,5 +41,6 @@ spec:
         targetValue: "1"
         url: "http://localhost:5000/app/basicAuth/metric/metricid"
         valueLocation: "metric"
+        authMode: "basic"
       authenticationRef:
         name: keda-metric-api-basic-auth-credential

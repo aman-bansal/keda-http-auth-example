@@ -4,9 +4,7 @@ metadata:
   name: keda-metric-api-auth-query-d
   namespace: default
 data:
-  authMode: "YXBpS2V5QXV0aA=="
   apiKey: "U2FtcGxlQXBpS2V5"
-  method: "cXVlcnk="
 ---
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
@@ -15,15 +13,9 @@ metadata:
   namespace: default
 spec:
   secretTargetRef:
-    - parameter: authMode
-      name: keda-metric-api-auth-query-d
-      key: authMode
     - parameter: apiKey
       name: keda-metric-api-auth-query-d
       key: apiKey
-    - parameter: method
-      name: keda-metric-api-auth-query-d
-      key: method
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
@@ -45,5 +37,7 @@ spec:
         targetValue: "1"
         url: "http://localhost:5000/app/apiAuth/query/d/metric/metricid"
         valueLocation: "metric"
+        authMode: "apiKey"
+        method: "query"
       authenticationRef:
         name: keda-metric-api-auth-query-d-credential
